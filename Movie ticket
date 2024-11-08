@@ -1,0 +1,221 @@
+#include <stdio.h>
+
+#include <stdlib.h>
+
+#include<string.h>
+
+#define MAX_MOVIES 4
+
+#define MAX_SEATS 10
+
+typedef struct {
+
+ char title[100];
+
+ int showtimes[3];
+
+ int seats[MAX_SEATS];
+
+} Movie;
+
+void initializeMovies(Movie movies[MAX_MOVIES]) {
+
+ strcpy(movies[0].title, "Leo");
+
+ movies[0].showtimes[0] = 10;
+
+ movies[0].showtimes[1] = 14;
+
+ movies[0].showtimes[2] = 18;
+
+ strcpy(movies[1].title, "RRR");
+
+ movies[1].showtimes[0] = 11;
+
+ movies[1].showtimes[1] = 15;
+
+ movies[1].showtimes[2] = 19;
+
+ strcpy(movies[2].title, "RDX");
+
+ movies[2].showtimes[0] = 12;
+
+ movies[2].showtimes[1] = 16;
+
+ movies[2].showtimes[2] = 20;
+
+ strcpy(movies[3].title, "Avengers");
+
+ movies[3].showtimes[0] = 13;
+
+ movies[3].showtimes[1] = 17;
+
+ movies[3].showtimes[2] = 21;
+
+ for(int i = 0; i < MAX_MOVIES; i++) {
+
+ for(int j = 0; j < MAX_SEATS; j++) {
+
+ movies[i].seats[j] = 1; // Initialize all seats as available (1)
+
+ }
+
+ }
+
+}
+
+void displayMovies(Movie movies[MAX_MOVIES]) {
+
+ printf("Available Movies:\n");
+
+for(int i = 0; i < MAX_MOVIES; i++) {
+
+ printf("%d. %s\n", i+1, movies[i].title);
+
+ }
+
+}
+
+void displayShowtimes(Movie movie) {
+
+ printf("Available Showtimes for %s:\n", movie.title);
+
+ for(int i = 0; i < 3; i++) {
+
+ printf("%d. %d:00\n", i+1, movie.showtimes[i]);
+
+ }
+
+}
+
+void bookSeats(Movie *movie, int showtime) {
+
+ int num_seats, seat_number;
+
+ printf("Enter the number of seats to book: ");
+
+ scanf("%d", &num_seats);
+
+ printf("Available seats: ");
+
+ for(int i = 0; i < MAX_SEATS; i++) {
+
+ if(movie->seats[i] == 1) {
+
+ printf("%d ", i+1);
+
+ }
+
+ }
+
+ printf("\n");
+
+ for(int i = 0; i < num_seats; i++) {
+
+ printf("Enter seat number %d: ", i+1);
+
+ scanf("%d", &seat_number);
+
+ if(seat_number < 1 || seat_number > MAX_SEATS || movie->seats[seat_number-1] == 0) {
+
+ printf("Invalid seat number or seat already booked. Please try again.\n");
+
+ i--;
+
+ } else {
+
+ movie->seats[seat_number-1] = 0; // Mark seat as booked (0)
+
+ }
+
+ }
+
+ printf("Seats booked successfully!\n");
+
+}
+
+int main() {
+
+ Movie movies[MAX_MOVIES];
+
+ initializeMovies(movies);
+
+ int choice, movie_choice, showtime_choice;
+
+ printf("welcome to C cinemas");
+
+ printf("\n4K Dolby");
+
+ do {
+
+ printf("\nMenu:\n");
+
+ printf("1. Display available movies\n");
+
+ printf("2. Book tickets\n");
+
+ printf("3. Quit\n");
+
+printf("Enter your choice: ");
+
+ scanf("%d", &choice);
+
+ switch(choice) {
+
+ case 1:
+
+ displayMovies(movies);
+
+ break;
+
+ case 2:
+
+ printf("Enter the movie number: ");
+
+ scanf("%d", &movie_choice);
+
+ if(movie_choice < 1 || movie_choice > MAX_MOVIES) {
+
+ printf("Invalid movie choice. Please try again.\n");
+
+ break;
+
+ }
+
+ displayShowtimes(movies[movie_choice-1]);
+
+ printf("Enter the showtime number: ");
+
+ scanf("%d", &showtime_choice);
+
+ if(showtime_choice < 1 || showtime_choice > 3) {
+
+ printf("Invalid showtime choice. Please try again.\n");
+
+ break;
+
+ }
+
+ bookSeats(&movies[movie_choice-1], movies[movie_choice-
+
+1].showtimes[showtime_choice-1]);
+
+ break;
+
+ case 3:
+
+ printf("Exiting...\n");
+
+ break;
+
+ default:
+
+ printf("Invalid choice. Please try again.\n");
+
+ }
+
+ } while(choice != 3);
+
+ return 0;
+
+}
